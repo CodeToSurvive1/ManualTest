@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+var path = require('path');
+var program = require('commander');
+var Server = require('../lib/index.js');
+var co = require('co');
+
+var pkg = require('../package.json');
+
+program
+    .version(pkg.version)
+    .option('start', 'start manual test');
+
+program.command('start')
+    .description('Start Manual Test')
+    .action(function () {
+        try {
+            co(Server);
+        } catch (ex) {
+            console.log(ex);
+        }
+    });
+
+program.parse(process.argv);
+
+if (!process.argv.slice(2).length) {
+    program.outputHelp();
+}
